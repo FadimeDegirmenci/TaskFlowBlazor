@@ -1,0 +1,43 @@
+﻿@page "/tasks"
+@using TaskFlow.Models
+
+<PageTitle>Görevler</PageTitle>
+
+<h1>Görevlerim</h1>
+
+<p>
+    Toplam görev: @tasks.Count |
+    Tamamlanan: @tasks.Count(t => t.IsCompleted) |
+    Bekleyen: @tasks.Count(t => !t.IsCompleted)
+</p>
+
+<ul>
+    @foreach (var task in tasks)
+    {
+        <li style="@(task.IsCompleted ? "text-decoration: line-through;" : "")">
+            @task.Title - @task.Priority
+
+            @if (task.Priority == TaskPriority.High || task.Priority == TaskPriority.Critical)
+            {
+                <strong> (ÖNEMLİ)</strong>
+            }
+
+            @if (!task.IsCompleted && task.DueDate < DateTime.Now)
+            {
+                <span style="color: red;"> - SÜRESİ GEÇTİ</span>
+            }
+        </li>
+    }
+</ul>
+
+@code {
+    private List<TaskItem> tasks = new();
+
+    protected override void OnInitialized()
+    {
+        tasks.Add(new TaskItem { Title = "Rapor yaz", Priority = TaskPriority.High, DueDate = DateTime.Now.AddDays(2) });
+        tasks.Add(new TaskItem { Title = "E-posta gönder", Priority = TaskPriority.Low, DueDate = DateTime.Now.AddDays(1), IsCompleted = true });
+        tasks.Add(new TaskItem { Title = "Toplantıya katıl", Priority = TaskPriority.Medium, DueDate = DateTime.Now.AddDays(5) });
+        tasks.Add(new TaskItem { Title = "Sunum hazırla", Priority = TaskPriority.Critical, DueDate = DateTime.Now.AddDays(-1) });
+    }
+}
