@@ -15,7 +15,7 @@
     @foreach (var task in tasks)
     {
         <li style="@(task.IsCompleted ? "text-decoration: line-through;" : "")">
-            @task.Title - @task.Priority
+            @task.GetSummary()
 
             @if (task.Priority == TaskPriority.High || task.Priority == TaskPriority.Critical)
             {
@@ -35,9 +35,10 @@
 
     protected override void OnInitialized()
     {
-        tasks.Add(new TaskItem { Title = "Rapor yaz", Priority = TaskPriority.High, DueDate = DateTime.Now.AddDays(2) });
-        tasks.Add(new TaskItem { Title = "E-posta gönder", Priority = TaskPriority.Low, DueDate = DateTime.Now.AddDays(1), IsCompleted = true });
-        tasks.Add(new TaskItem { Title = "Toplantıya katıl", Priority = TaskPriority.Medium, DueDate = DateTime.Now.AddDays(5) });
-        tasks.Add(new TaskItem { Title = "Sunum hazırla", Priority = TaskPriority.Critical, DueDate = DateTime.Now.AddDays(-1) });
+        tasks.Add(new PersonalTask("Spor salonuna git", TaskPriority.Low) { Location = "Fitness Center", DueDate = DateTime.Now.AddDays(1) });
+        tasks.Add(new TeamTask("Sunum hazırla", TaskPriority.Critical, "Fadime") { DueDate = DateTime.Now.AddDays(-1) });
+        tasks.Add(new TeamTask("Kod incelemesi yap", TaskPriority.High, "Mehmet Hoca") { DueDate = DateTime.Now.AddDays(3) });
+        tasks.Add(new PersonalTask("Kitap oku", TaskPriority.Medium) { DueDate = DateTime.Now.AddDays(7), IsCompleted = true });
     }
 }
+
