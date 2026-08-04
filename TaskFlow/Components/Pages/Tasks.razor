@@ -1,5 +1,6 @@
 ﻿@page "/tasks"
 @using TaskFlow.Models
+@inject ITaskRepository TaskRepository
 
 <PageTitle>Görevler</PageTitle>
 
@@ -30,15 +31,19 @@
     }
 </ul>
 
+
+
+
+
+
+
+
 @code {
     private List<TaskItem> tasks = new();
 
     protected override void OnInitialized()
     {
-        tasks.Add(new PersonalTask("Spor salonuna git", TaskPriority.Low) { Location = "Fitness Center", DueDate = DateTime.Now.AddDays(1) });
-        tasks.Add(new TeamTask("Sunum hazırla", TaskPriority.Critical, "Fadime") { DueDate = DateTime.Now.AddDays(-1) });
-        tasks.Add(new TeamTask("Kod incelemesi yap", TaskPriority.High, "Mehmet Hoca") { DueDate = DateTime.Now.AddDays(3) });
-        tasks.Add(new PersonalTask("Kitap oku", TaskPriority.Medium) { DueDate = DateTime.Now.AddDays(7), IsCompleted = true });
+        tasks = TaskRepository.GetAll();
     }
 }
 
