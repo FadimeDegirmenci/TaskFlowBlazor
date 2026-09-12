@@ -31,19 +31,22 @@
     }
 </ul>
 
-
-
-
-
-
-
-
 @code {
     private List<TaskItem> tasks = new();
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         tasks = TaskRepository.GetAll();
+        TaskRepository.TaskCompleted += OnTaskCompleted;
+
+        var first = tasks.FirstOrDefault();
+        if (first is not null)
+        {
+            var found = await TaskRepository.GetByIdAsync(first.Id);
+            Console.WriteLine($"Async ile bulunan görev: {found?.Title}");
+        }
+    }
+    private void OnTaskCompleted(TaskItem task)
+    {
+        Console.WriteLine($"Bildirim: '{task.Title}' tamamlandı!");
     }
 }
-

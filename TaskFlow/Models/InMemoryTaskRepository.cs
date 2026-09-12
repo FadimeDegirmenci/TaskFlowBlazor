@@ -4,6 +4,8 @@ public class InMemoryTaskRepository : ITaskRepository
 {
     private readonly List<TaskItem> _tasks = new();
 
+    public event Action<TaskItem>? TaskCompleted;
+
     public InMemoryTaskRepository()
     {
         _tasks.Add(new PersonalTask("Spor salonuna git", TaskPriority.Low) { Location = "Fitness Center", DueDate = DateTime.Now.AddDays(1) });
@@ -28,6 +30,13 @@ public class InMemoryTaskRepository : ITaskRepository
         if (task is not null)
         {
             task.IsCompleted = true;
+            TaskCompleted?.Invoke(task);
         }
+    }
+
+    public async Task<TaskItem?> GetByIdAsync(Guid id)
+    {
+        await Task.Delay(200);
+        return _tasks.FirstOrDefault(t => t.Id == id);
     }
 }
