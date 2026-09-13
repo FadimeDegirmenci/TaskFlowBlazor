@@ -39,4 +39,10 @@ public class InMemoryTaskRepository : ITaskRepository
         await Task.Delay(200);
         return _tasks.FirstOrDefault(t => t.Id == id);
     }
+
+    [Command("listele")]
+    public void PrintAllTitles()
+    {
+        foreach (var t in _tasks) Console.WriteLine(t.Title);
+    }
 }

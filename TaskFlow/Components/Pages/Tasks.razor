@@ -1,11 +1,11 @@
 ﻿@page "/tasks"
 @using TaskFlow.Models
 @inject ITaskRepository TaskRepository
-
+@inject List<string> FoundCommands
 <PageTitle>Görevler</PageTitle>
 
 <h1>Görevlerim</h1>
-
+<p><em>Reflection ile bulunan komutlar: @string.Join(", ", FoundCommands)</em></p>
 <p>
     Toplam görev: @tasks.Count |
     Tamamlanan: @tasks.Count(t => t.IsCompleted) |
@@ -44,6 +44,10 @@
             var found = await TaskRepository.GetByIdAsync(first.Id);
             Console.WriteLine($"Async ile bulunan görev: {found?.Title}");
         }
+
+        using var logger = new TaskLogger();
+        logger.Log("Görevler sayfası açıldı");
+        logger.Log($"Toplam {tasks.Count} görev bulundu");
     }
     private void OnTaskCompleted(TaskItem task)
     {
